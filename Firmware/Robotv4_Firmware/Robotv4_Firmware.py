@@ -61,23 +61,20 @@ def pin_mode(pin, val):
 #Execution loop
 while(True):
     #For the sake of demo, a simple text-based control system:
-    #print("hi")
-
-    if select.select([sys.stdin,],[],[],0.0)[0]:
-        for line in sys.stdin.readlines():
-            line.rstrip() #remove \n
-            words = line.split() #parses out the words using " " as default delim
-            print(words)
-            if (words[0] == "forward"):
-                if(words[1] == "1"):
-                    print("going forward")
-                    speed = int(words[2])
-                    roboclaw.ForwardM1(address, speed)
-                elif(words[1] == "2"):
-                    speed = int(words[2])
-                    roboclaw.ForwardM2(address, speed)
-            elif(words[0] == "stop"):
-                stop()
+    var = input("Please Enter a drive command: ")
+    print("You entered", var)
+    words = var.split()
+    print(words)
+    if (words[0] == "forward"):
+        if(words[1] == "1"):
+            print("going forward")
+            speed = int(words[2])
+            roboclaw.ForwardM1(address, speed)
+        elif(words[1] == "2"):
+            speed = int(words[2])
+            roboclaw.ForwardM2(address, speed)
+    elif(words[0] == "stop"):
+        stop()
     #else:
         #print ("No data")
 

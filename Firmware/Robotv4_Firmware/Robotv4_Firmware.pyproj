@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>267fb987-81f3-4b77-9572-7334f0bfab37</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Robotv4_Firmware.py</StartupFile>
+    <StartupFile>text_test.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Robotv4_Firmware.py" />
+    <Compile Include="start.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="stop.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="text_test.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
