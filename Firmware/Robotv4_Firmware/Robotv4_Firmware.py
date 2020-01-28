@@ -6,6 +6,7 @@
 
 #Libraries
 from roboclaw import Roboclaw #roboclaw library left adjancent to this module
+import select
 import sys
 
 
@@ -61,8 +62,11 @@ def pin_mode(pin, val):
 while(True):
     #For the sake of demo, a simple text-based control system:
     print("hi")
-    for line in sys.stdin:
-        sys.stdout.write(line)
+
+    if select.select([sys.stdin,],[],[],0.0)[0]:
+        print ("Have data!")
+    else:
+        print ("No data")
 
     for line in sys.stdin.readlines():
         line.rstrip() #remove \n
