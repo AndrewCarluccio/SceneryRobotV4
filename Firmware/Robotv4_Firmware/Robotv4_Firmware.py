@@ -17,6 +17,6 @@ roboclaw.Open()
 
 # Start motor 1 in the forward direction at half speed
 
-roboclaw.ForwardM1(address, 63)
-roboclaw.ForwardM2(address, 63)
+roboclaw.ForwardM1(address, 120)
+roboclaw.ForwardM2(address, 120)
 
