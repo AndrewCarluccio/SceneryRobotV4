@@ -65,11 +65,12 @@ while(True):
         words = line.split() #parses out the words using " " as default delim
         if (words[0] == "forward"):
             if(words[1] == "1"):
+                print("going forward")
                 speed = int(words[2])
                 roboclaw.ForwardM1(address, speed)
             elif(words[1] == "2"):
                 speed = int(words[2])
-                roboclaw.ForwardM1(address, speed)
+                roboclaw.ForwardM2(address, speed)
         elif(words[0] == "stop"):
             stop()
 
