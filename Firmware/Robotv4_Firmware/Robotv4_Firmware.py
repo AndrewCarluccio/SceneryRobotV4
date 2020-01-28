@@ -63,6 +63,7 @@ while(True):
     for line in sys.stdin:
         line.rstrip() #remove \n
         words = line.split() #parses out the words using " " as default delim
+        print(words)
         if (words[0] == "forward"):
             if(words[1] == "1"):
                 print("going forward")
