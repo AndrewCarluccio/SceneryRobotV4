@@ -61,6 +61,10 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
+
+roboclaw.SetEncM1(address, 0)
+roboclaw.SetEncM2(address, 0)
+
 #Execution loop
 while(True):
     #For the sake of demo, a simple text-based control system:
