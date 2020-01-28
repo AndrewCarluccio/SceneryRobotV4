@@ -61,7 +61,7 @@ def pin_mode(pin, val):
 while(True):
     #For the sake of demo, a simple text-based control system:
     print("hi")
-    for line in sys.stdin:
+    for line in sys.stdin.readlines():
         line.rstrip() #remove \n
         words = line.split() #parses out the words using " " as default delim
         print(words)
