@@ -78,7 +78,7 @@ while(True):
                     roboclaw.ForwardM2(address, speed)
             elif(words[0] == "stop"):
                 stop()
-    else:
+    #else:
         #print ("No data")
 
     
