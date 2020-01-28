@@ -83,7 +83,7 @@ while(True):
 
     elif(words[0] == "cue"):
         #SpeedAccelDeccelPositionM1(self,address,accel,speed,deccel,position,buffer)
-        roboclaw.SpeedAccelDeccelPositionM1(address,words[1],words[2],words[3],words[4],words[5])
+        roboclaw.SpeedAccelDeccelPositionM1(address,int(words[1]),int(words[2]),int(words[3]),int(words[4]),int(words[5]))
     #else:
         #print ("No data")
 
