@@ -61,7 +61,7 @@ def pin_mode(pin, val):
 #Execution loop
 while(True):
     #For the sake of demo, a simple text-based control system:
-    var = input("Please Enter a drive command: ")
+    var = raw_input("Please Enter a drive command: ")
     print("You entered", var)
     words = var.split()
     print(words)
