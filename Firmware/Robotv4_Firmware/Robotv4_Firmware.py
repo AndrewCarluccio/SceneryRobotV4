@@ -61,7 +61,7 @@ def pin_mode(pin, val):
 #Execution loop
 while(True):
     #For the sake of demo, a simple text-based control system:
-    print("hi")
+    #print("hi")
 
     if select.select([sys.stdin,],[],[],0.0)[0]:
         for line in sys.stdin.readlines():
@@ -79,7 +79,7 @@ while(True):
             elif(words[0] == "stop"):
                 stop()
     else:
-        print ("No data")
+        #print ("No data")
 
     
 
