@@ -31,7 +31,10 @@ def drive(args):
 
 #Returns the encoder data for a particular motor
 def get_encoder_data(enc_id):
-    return 1
+    if(enc_id == 1):
+        return roboclaw.ReadEncM1(address)
+    elif(enc_id == 2):
+        return roboclaw.ReadEncM2(address)
 
 #Publish data to the server
 def publish_data(page, data):
@@ -84,6 +87,10 @@ while(True):
     elif(words[0] == "cue"):
         #SpeedAccelDeccelPositionM1(self,address,accel,speed,deccel,position,buffer)
         roboclaw.SpeedAccelDeccelPositionM1(address,int(words[1]),int(words[2]),int(words[3]),int(words[4]),int(words[5]))
+
+    elif(words[0] == "enc"):
+        print(get_encoder_data(1))
+        print(get_encoder_data(2))
     #else:
         #print ("No data")
 
