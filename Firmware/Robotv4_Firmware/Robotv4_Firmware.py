@@ -89,9 +89,14 @@ while(True):
         stop()
 
     elif(words[0] == "cue"):
+        if(words[1] == "all"):
+             roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
+             roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
         #SpeedAccelDeccelPositionM1(self,address,accel,speed,deccel,position,buffer)
-        roboclaw.SpeedAccelDeccelPositionM1(address,int(words[1]),int(words[2]),int(words[3]),int(words[4]),int(words[5]))
-
+        elif(words[1] == "1"):
+            roboclaw.SpeedAccelDeccelPositionM1(address,int(words[1]),int(words[2]),int(words[3]),int(words[4]),int(words[5]))
+        elif(words[1] == "2"):
+            roboclaw.SpeedAccelDeccelPositionM2(address,int(words[1]),int(words[2]),int(words[3]),int(words[4]),int(words[5]))
     elif(words[0] == "enc"):
         print(get_encoder_data(1))
         print(get_encoder_data(2))
