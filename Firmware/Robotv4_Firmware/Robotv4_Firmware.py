@@ -73,8 +73,17 @@ while(True):
         elif(words[1] == "2"):
             speed = int(words[2])
             roboclaw.ForwardM2(address, speed)
+        elif(words[1] == "all"):
+            speed = int(words[2])
+            roboclaw.ForwardM2(address, speed)
+            roboclaw.ForwardM1(address, speed)
+            
     elif(words[0] == "stop"):
         stop()
+
+    elif(words[0] == "cue"):
+        #SpeedAccelDeccelPositionM1(self,address,accel,speed,deccel,position,buffer)
+        SpeedAccelDeccelPositionM1(self,address,words[1],words[2],words[3],words[4],words[5])
     #else:
         #print ("No data")
 
