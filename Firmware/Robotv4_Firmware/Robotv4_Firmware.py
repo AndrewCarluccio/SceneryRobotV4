@@ -66,6 +66,8 @@ def pin_mode(pin, val):
 roboclaw.SetEncM1(address, 0)
 roboclaw.SetEncM2(address, 0)
 
+full_rotation = 4218.048
+
 #Execution loop
 while(True):
     #For the sake of demo, a simple text-based control system:
@@ -105,6 +107,11 @@ while(True):
         roboclaw.ForwardM1(address, 50) 
         time.sleep(0.1)
         roboclaw.ForwardM1(address, 0) 
+    elif(words[0] == "spin1"):
+        roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),full_rotation,int(words[6]))
+    elif(words[0] == "spin2"):
+        roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),(full_rotation / 2.0),int(words[6]))
+        roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),(full_rotation / -2.0),int(words[6]))
         
 
     #else:
