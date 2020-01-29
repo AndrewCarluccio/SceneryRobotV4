@@ -103,7 +103,7 @@ while(True):
         roboclaw.SetEncM2(address, 0)
     elif(words[0] == "inc"):
         roboclaw.ForwardM1(address, 50) 
-        time.sleep(0.5)
+        time.sleep(0.1)
         roboclaw.ForwardM1(address, 0) 
         
 
