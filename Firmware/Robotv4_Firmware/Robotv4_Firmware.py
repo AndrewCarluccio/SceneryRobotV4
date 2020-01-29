@@ -66,7 +66,7 @@ def pin_mode(pin, val):
 roboclaw.SetEncM1(address, 0)
 roboclaw.SetEncM2(address, 0)
 
-full_rotation = 4218.048*2.0
+full_rotation = 4218*2
 
 #Execution loop
 while(True):
