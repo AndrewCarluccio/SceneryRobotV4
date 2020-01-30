@@ -110,8 +110,8 @@ while(True):
     elif(words[0] == "spin1"):
         roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation),1)
     elif(words[0] == "spin2"):
-        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 4.0),1)
-        roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -4.0),1)
+        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 2.0),1)
+        roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
         
 
     #else:
