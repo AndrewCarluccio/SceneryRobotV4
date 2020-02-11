@@ -5,7 +5,7 @@
 #Sai Raj
 
 #Libraries
-from roboclaw import Roboclaw #roboclaw library left adjancent to this module
+from Roboclaw.roboclaw import Roboclaw #roboclaw library left adjancent to this module
 import select
 import sys
 import time
