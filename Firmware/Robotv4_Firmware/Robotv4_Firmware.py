@@ -74,9 +74,9 @@ def read_ini():
             if len(config) != 2:
                 print("'settings.ini' format error. Please format exactly like such:\n\tip=[IP address of server]\n\tport=[listening port of server]")
                 sys.exit(1)
-            if config[0] == 'ip':
+            if config[0] == "ip":
                 ip = config[1]
-            elif config[0] == 'port':
+            elif config[0] == "port":
                 port = config[1]
             else:
                 print("Invalid option '{}'' provided in 'settings.ini'".format(config[0]))
