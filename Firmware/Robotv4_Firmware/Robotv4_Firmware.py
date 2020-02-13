@@ -62,6 +62,28 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
+# Reads 'settings.ini' and returns tuple (ip, port)
+# Default return tuple is: ("0.0.0.0", 80)
+def read_ini():
+    ip = "0.0.0.0"
+    port = 80
+
+    with open("settings.ini", "r") as f:
+        for line in f:
+            config = line.rstrip("\n").split("=")
+            if len(config) != 2:
+                print("'settings.ini' format error. Please format exactly like such:\n\tip=[IP address of server]\n\tport=[listening port of server]")
+                sys.exit(1)
+            if config[0] == 'ip':
+                ip = config[1]
+            elif config[0] == 'port':
+                port = config[1]
+            else:
+                print("Invalid option '{}'' provided in 'settings.ini'".format(config[0]))
+                sys.exit(1)
+
+    return (ip, port)
+
 
 roboclaw.SetEncM1(address, 0)
 roboclaw.SetEncM2(address, 0)
