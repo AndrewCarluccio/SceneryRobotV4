@@ -64,6 +64,7 @@ def pin_mode(pin, val):
 
 #This is where we are testing the NURB follow ability
 def curve_test():
+    print("Running curve test...")
     # Create the curve instance
     crv = BSpline.Curve()
     # Set degree
