@@ -72,7 +72,7 @@ def curve_test():
     # Set control points
     crv.ctrlpts = [[1, 0], [1, 1]]
     # Set knot vector
-    crv.knotvector = [5, 0, 3, 1]
+    crv.knotvector = [1, 0, 1, 1]
     
     # Get curve points
     points = crv.evalpts
