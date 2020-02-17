@@ -9,7 +9,7 @@ from Roboclaw.roboclaw import Roboclaw #roboclaw library left adjancent to this 
 import select
 import sys
 import time
-
+from geomdl import BSpline
 
 # address of the RoboClaw as set in Motion Studio
 address = 128
@@ -62,6 +62,26 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
+#This is where we are testing the NURB follow ability
+def curve_test():
+    # Create the curve instance
+    crv = BSpline.Curve()
+    # Set degree
+    crv.degree = 1
+    # Set control points
+    crv.ctrlpts = [[1, 0, 0], [1, 1, 0]]
+    # Set knot vector
+    crv.knotvector = [0, 0, 1, 1]
+    
+    # Get curve points
+    points = crv.evalpts
+
+    # Do something with the evaluated points
+    for pt in points:
+        print(pt)
+
+    return 1
+
 
 roboclaw.SetEncM1(address, 0)
 roboclaw.SetEncM2(address, 0)
@@ -112,6 +132,8 @@ while(True):
     elif(words[0] == "spin2"):
         roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 2.0),1)
         roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
+    elif(words[0] == "curve"):
+        curve_test()
         
 
     #else:
