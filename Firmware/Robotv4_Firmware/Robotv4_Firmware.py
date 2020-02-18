@@ -69,6 +69,22 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
+def get_global_coord():
+    enc1 = get_encoder_data(1)
+    enc2 = get_encoder_data(2)
+
+    left_change = enc1 - 0 #Change 0 to previously stored encoder data
+    right_change = enc2 - 0
+
+    total_change = left_change + right_change /2
+    length = 5.5 #This is the length of the robot in inches
+    change_angle = (right_change - left_change) / length
+
+    change_x = total_change * math.cos(0 + change_angle/2) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(0 + change_angle/2)
+
+    return(change_x, change_y)
+
 def get_power_set(err_theta,err_dist):
     #We don't really need this, but it could be helpful in the future
     #focus_point = circ_swing(math.radians(err_theta),err_dist)
