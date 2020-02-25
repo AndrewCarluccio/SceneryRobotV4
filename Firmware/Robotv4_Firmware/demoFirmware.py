@@ -84,8 +84,8 @@ def update_encoders():
     enc1_prev = enc1
     enc2_prev = enc2
 
-    enc1 = get_encoder_data(1) #Left Wheel
-    enc2 = get_encoder_data(2) #Right Wheel
+    enc1 = get_encoder_data(1)[1] #Left Wheel
+    enc2 = get_encoder_data(2)[1] #Right Wheel
 
 
 def get_global_coord():
