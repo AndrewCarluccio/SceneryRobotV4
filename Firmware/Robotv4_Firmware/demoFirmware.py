@@ -153,7 +153,7 @@ def curve_test():
     # Create the curve instance
     crv = BSpline.Curve()
     # Set degree
-    crv.degree = 1
+    crv.degree = 3
     # Set control points
     crv.ctrlpts = [[-4, -4], [-2, 4], [2,-4], [4,4]]
     # Set knot vector
