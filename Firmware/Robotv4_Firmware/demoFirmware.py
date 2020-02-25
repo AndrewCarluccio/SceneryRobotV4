@@ -33,6 +33,8 @@ enc2 = 0
 enc1_prev = 0
 enc2_prev = 0
 
+angle_prev = 0
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -80,6 +82,7 @@ def update_encoders():
     global enc2
     global enc1_prev
     global enc2_prev
+    
 
     enc1_prev = enc1
     enc2_prev = enc2
@@ -93,6 +96,7 @@ def get_global_coord():
     global enc2
     global enc1_prev
     global enc2_prev
+    global angle_prev
 
     update_encoders()
 
@@ -103,8 +107,8 @@ def get_global_coord():
     length = 5.5 #This is the length of the robot in inches
     change_angle = (right_change - left_change) / length
 
-    change_x = total_change * math.cos(current_angle + change_angle/2) #Change 0 to previously stored angle
-    change_y = total_change * math.sin(current_angle + change_angle/2)
+    change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(angle_prev + change_angle/2)
 
     return[change_x, change_y]
 
