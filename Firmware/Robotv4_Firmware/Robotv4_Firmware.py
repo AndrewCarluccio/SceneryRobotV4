@@ -27,6 +27,10 @@ STEP_1 = 100
 STEP_2 = 300
 STEP_3 = 500
 
+current_left_encoder = 0
+current_right_encoder = 0
+current_angle = 0
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -39,9 +43,9 @@ def drive(args):
 
 #Returns the encoder data for a particular motor
 def get_encoder_data(enc_id):
-    if(enc_id == 1):
+    if(enc_id == 1): #left wheel
         return roboclaw.ReadEncM1(address)
-    elif(enc_id == 2):
+    elif(enc_id == 2): #right wheel
         return roboclaw.ReadEncM2(address)
 
 #Publish data to the server
@@ -68,6 +72,22 @@ def config_server(input_file):
 #Sets a particular SPI pin HIGH or LOW for external devices
 def pin_mode(pin, val):
     return 1
+
+def get_global_coord():
+    enc1 = get_encoder_data(1) #Left Wheel
+    enc2 = get_encoder_data(2) #Right Wheel
+
+    left_change = enc1 - current_left_encoder #Change 0 to previously stored encoder data
+    right_change = enc2 - current_right_encoder
+
+    total_change = left_change + right_change /2
+    length = 5.5 #This is the length of the robot in inches
+    change_angle = (right_change - left_change) / length
+
+    change_x = total_change * math.cos(current_angle + change_angle/2) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(current_angle + change_angle/2)
+
+    return[change_x, change_y]
 
 def get_power_set(err_theta,err_dist):
     #We don't really need this, but it could be helpful in the future
