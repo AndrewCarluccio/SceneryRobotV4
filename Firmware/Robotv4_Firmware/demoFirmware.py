@@ -69,6 +69,22 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
+def get_global_coord():
+    enc1 = get_encoder_data(1) #Left Wheel
+    enc2 = get_encoder_data(2) #Right Wheel
+
+    left_change = enc1 - current_left_encoder #Change 0 to previously stored encoder data
+    right_change = enc2 - current_right_encoder
+
+    total_change = left_change + right_change /2
+    length = 5.5 #This is the length of the robot in inches
+    change_angle = (right_change - left_change) / length
+
+    change_x = total_change * math.cos(current_angle + change_angle/2) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(current_angle + change_angle/2)
+
+    return[change_x, change_y]
+
 def get_power_set(err_theta,err_dist):
     #We don't really need this, but it could be helpful in the future
     #focus_point = circ_swing(math.radians(err_theta),err_dist)
@@ -122,11 +138,11 @@ def curve_test():
     print(focus_pts)
 
     #my_pos should be fed by encoder readings, not by speculation of success
-    my_pos = focus_pts[0]
+    my_pos = get_global_coord()
     theta = 0
 
     for pt in focus_points:
-        while(pt != my_pos): #add some margin check?
+        while(abs(pt[0] - my_pos[0]) <10 and abs(pt[1] - my_pos[1])<10): #add some margin check?
             gamma = math.atan2((pt[1]-my_pos[1]) / (pt[0]-my_pos[0]))
             e_theta = theta-gamma
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
@@ -137,7 +153,7 @@ def curve_test():
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
             #update my_pos
-
+            my_pos = get_global_coord()
             #roboclaw.ForwardM2(address, power_command[0])
             #roboclaw.ForwardM1(address, power_command[1]) 
 
