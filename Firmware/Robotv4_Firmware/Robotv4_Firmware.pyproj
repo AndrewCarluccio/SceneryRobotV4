@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>267fb987-81f3-4b77-9572-7334f0bfab37</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Robotv4_Firmware.py</StartupFile>
+    <StartupFile>demoFirmware.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="demoFirmware.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="pid_calculator.py">
       <SubType>Code</SubType>
     </Compile>

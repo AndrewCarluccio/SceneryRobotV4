@@ -126,7 +126,7 @@ def curve_test():
     theta = 0
 
     for pt in focus_points:
-        if(pt != my_pos):
+        while(pt != my_pos): #add some margin check?
             gamma = math.atan2((pt[1]-my_pos[1]) / (pt[0]-my_pos[0]))
             e_theta = theta-gamma
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
@@ -135,6 +135,8 @@ def curve_test():
             base_power_set = [50,50] #or fake it in my case
             power_offsets = get_power_set(e_theta,e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
+
+            #update my_pos
 
             #roboclaw.ForwardM2(address, power_command[0])
             #roboclaw.ForwardM1(address, power_command[1]) 
