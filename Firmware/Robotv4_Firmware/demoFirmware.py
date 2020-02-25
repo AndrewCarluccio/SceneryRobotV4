@@ -76,6 +76,11 @@ def pin_mode(pin, val):
     return 1
 
 def update_encoders():
+    global enc1
+    global enc2
+    global enc1_prev
+    global enc2_prev
+
     enc1_prev = enc1
     enc2_prev = enc2
 
@@ -84,6 +89,11 @@ def update_encoders():
 
 
 def get_global_coord():
+    global enc1
+    global enc2
+    global enc1_prev
+    global enc2_prev
+
     update_encoders()
 
     left_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
@@ -99,6 +109,11 @@ def get_global_coord():
     return[change_x, change_y]
 
 def get_power_set(err_theta,err_dist):
+    global enc1
+    global enc2
+    global enc1_prev
+    global enc2_prev
+
     #We don't really need this, but it could be helpful in the future
     #focus_point = circ_swing(math.radians(err_theta),err_dist)
 
@@ -125,6 +140,11 @@ def get_power_set(err_theta,err_dist):
 
 #This is where we are testing the NURB follow ability
 def curve_test():
+    global enc1
+    global enc2
+    global enc1_prev
+    global enc2_prev
+
     print("Running curve test...")
     # Create the curve instance
     crv = BSpline.Curve()
