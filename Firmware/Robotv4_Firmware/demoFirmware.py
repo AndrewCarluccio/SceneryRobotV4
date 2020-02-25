@@ -164,10 +164,10 @@ def curve_test():
 
     #assign every 10th pt to a list, as well as start and finish
     focus_pts = []
-    focus_pts.append(points[0])
+    #focus_pts.append(points[0])
     k=0
     for pt in points:
-        if((k % 10) == 0):
+        if((k % 11) == 0):
             focus_pts.append(pt)
             #print(pt)
     focus_pts.append(points[len(points)-1])
