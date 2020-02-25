@@ -155,9 +155,9 @@ def curve_test():
     # Set degree
     crv.degree = 1
     # Set control points
-    crv.ctrlpts = [[0, 0], [1, 1]]
+    crv.ctrlpts = [[-4, -4], [-2, 4], [2,-4], [4,4], [-0.42, 3.5]]
     # Set knot vector
-    crv.knotvector = [0, 0, 1, 1]
+    crv.knotvector = [0, 0.143, 0.286, 0.429, 0.571, 0.714, 0.857, 1]
     
     # Get curve points
     points = crv.evalpts
