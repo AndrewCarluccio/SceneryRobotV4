@@ -27,6 +27,12 @@ STEP_1 = 100
 STEP_2 = 300
 STEP_3 = 500
 
+enc1 = 0
+enc2 = 0
+
+enc1_prev = 0
+enc2_prev = 0
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -69,12 +75,19 @@ def config_server(input_file):
 def pin_mode(pin, val):
     return 1
 
-def get_global_coord():
+def update_encoders():
+    enc1_prev = enc1
+    enc2_prev = enc2
+
     enc1 = get_encoder_data(1) #Left Wheel
     enc2 = get_encoder_data(2) #Right Wheel
 
-    left_change = enc1 - current_left_encoder #Change 0 to previously stored encoder data
-    right_change = enc2 - current_right_encoder
+
+def get_global_coord():
+    update_encoders()
+
+    left_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
+    right_change = enc2 - enc2_prev
 
     total_change = left_change + right_change /2
     length = 5.5 #This is the length of the robot in inches
