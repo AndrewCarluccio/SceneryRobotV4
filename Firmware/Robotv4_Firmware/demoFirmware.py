@@ -110,7 +110,7 @@ def get_global_coord():
     change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
     change_y = total_change * math.sin(angle_prev + change_angle/2)
 
-    return[change_x, change_y]
+    return[change_x / 188, change_y / 188]
 
 def get_power_set(err_theta,err_dist):
     global enc1
