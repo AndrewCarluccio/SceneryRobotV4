@@ -27,10 +27,6 @@ STEP_1 = 100
 STEP_2 = 300
 STEP_3 = 500
 
-current_left_encoder = 0
-current_right_encoder = 0
-current_angle = 0
-
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -43,9 +39,9 @@ def drive(args):
 
 #Returns the encoder data for a particular motor
 def get_encoder_data(enc_id):
-    if(enc_id == 1): #left wheel
+    if(enc_id == 1):
         return roboclaw.ReadEncM1(address)
-    elif(enc_id == 2): #right wheel
+    elif(enc_id == 2):
         return roboclaw.ReadEncM2(address)
 
 #Publish data to the server
@@ -142,11 +138,11 @@ def curve_test():
     print(focus_pts)
 
     #my_pos should be fed by encoder readings, not by speculation of success
-    my_pos = focus_pts[0]
+    my_pos = get_global_coord()
     theta = 0
 
     for pt in focus_points:
-        if(pt != my_pos):
+        while(abs(pt[0] - my_pos[0]) <10 and abs(pt[1] - my_pos[1])<10): #add some margin check?
             gamma = math.atan2((pt[1]-my_pos[1]) / (pt[0]-my_pos[0]))
             e_theta = theta-gamma
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
@@ -156,6 +152,8 @@ def curve_test():
             power_offsets = get_power_set(e_theta,e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
+            #update my_pos
+            my_pos = get_global_coord()
             #roboclaw.ForwardM2(address, power_command[0])
             #roboclaw.ForwardM1(address, power_command[1]) 
 
