@@ -178,7 +178,7 @@ def curve_test():
     my_pos = get_global_coord()
     theta = 0
 
-    for pt in focus_points:
+    for pt in focus_pts:
         while(abs(pt[0] - my_pos[0]) <10 and abs(pt[1] - my_pos[1])<10): #add some margin check?
             gamma = math.atan2((pt[1]-my_pos[1]) / (pt[0]-my_pos[0]))
             e_theta = theta-gamma
