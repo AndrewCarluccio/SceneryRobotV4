@@ -181,6 +181,9 @@ def curve_test():
     my_pos = get_global_coord()
     theta = 0
 
+    print("Focus points")
+    print(focus_pts)
+
     for pt in focus_pts:
         while(abs(pt[0] - my_pos[0]) <10 and abs(pt[1] - my_pos[1])<10): #add some margin check?
             print("Target point is: ")
