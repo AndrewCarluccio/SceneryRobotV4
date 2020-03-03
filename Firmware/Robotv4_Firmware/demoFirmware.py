@@ -129,6 +129,7 @@ def get_power_set(err_theta,err_dist):
         power_offsets = [STEP_3,0]
     elif(err_theta<=60 and err_theta >= 30):
         power_offsets = [STEP_2,0]
+        print("45 case here")
     elif(err_theta<=80 and err_theta >= 60):
         power_offsets = [STEP_1,0]
     
