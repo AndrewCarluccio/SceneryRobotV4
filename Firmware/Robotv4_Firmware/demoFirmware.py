@@ -185,7 +185,7 @@ def curve_test():
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
-            base_power_set = [50,50] #or fake it in my case
+            base_power_set = [20,20] #or fake it in my case
             power_offsets = get_power_set(e_theta,e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
