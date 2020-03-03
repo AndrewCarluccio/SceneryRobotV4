@@ -185,10 +185,10 @@ def curve_test():
     print(focus_pts)
 
     for pt in focus_pts:
+        print("Target point is: ")
+        print(pt)
         while(abs(pt[0] - my_pos[0]) <10 and abs(pt[1] - my_pos[1])<10): #add some margin check?
-            print("Target point is: ")
-            print(pt)
-
+           
             gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
             e_theta = theta-gamma
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
