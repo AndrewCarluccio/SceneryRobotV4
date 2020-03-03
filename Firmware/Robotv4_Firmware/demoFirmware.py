@@ -35,6 +35,8 @@ enc2_prev = 0
 
 angle_prev = 0
 
+TICKS_PER_INCH = 188.46
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -168,9 +170,9 @@ def curve_test():
     k=0
     for pt in points:
         if((k % 11) == 0):
-            focus_pts.append(pt)
+            focus_pts.append(pt*TICKS_PER_INCH)
             #print(pt)
-    focus_pts.append(points[len(points)-1])
+    focus_pts.append(points[len(points)-1]*TICKS_PER_INCH)
 
     print(focus_pts)
 
@@ -191,8 +193,8 @@ def curve_test():
 
             #update my_pos
             my_pos = get_global_coord()
-            roboclaw.ForwardM1(address, power_command[0])
-            roboclaw.ForwardM2(address, power_command[1]) 
+            roboclaw.ForwardM2(address, power_command[0])
+            roboclaw.ForwardM1(address, power_command[1]) 
 
     return 1
 
