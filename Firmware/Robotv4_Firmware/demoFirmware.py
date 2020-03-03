@@ -196,7 +196,7 @@ def curve_test():
 
             #Now do the acceleration thing...
             base_power_set = [20,20] #or fake it in my case
-            power_offsets = get_power_set(e_theta,e_dist)
+            power_offsets = get_power_set(((e_theta*180)/3.14159),e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
             #update my_pos
