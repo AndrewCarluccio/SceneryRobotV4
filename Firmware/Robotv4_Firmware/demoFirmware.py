@@ -106,7 +106,7 @@ def get_global_coord():
     right_change = enc2 - enc2_prev
 
     total_change = left_change + right_change /2
-    length = 5.5 #This is the length of the robot in inches
+    length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
     change_angle = (right_change - left_change) / length
 
     change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
