@@ -122,6 +122,8 @@ def get_power_set(err_theta,err_dist):
     global enc1_prev
     global enc2_prev
 
+    err_theta += 90
+
     #We don't really need this, but it could be helpful in the future
     #focus_point = circ_swing(math.radians(err_theta),err_dist)
 
