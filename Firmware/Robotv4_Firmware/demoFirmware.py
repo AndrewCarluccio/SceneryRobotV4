@@ -161,7 +161,7 @@ def curve_test():
     # Set degree
     crv.degree = 3
     # Set control points
-    crv.ctrlpts = [[1, 1], [3, 7], [5,1], [9,9]]
+    crv.ctrlpts = [[0, 0], [3, 7], [5,1], [9,9]]
     # Set knot vector
     crv.knotvector = [0, 0, 0, 0, 1, 1, 1, 1]
     
