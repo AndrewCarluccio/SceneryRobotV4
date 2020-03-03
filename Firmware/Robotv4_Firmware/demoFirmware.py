@@ -111,6 +111,8 @@ def get_global_coord():
 
     change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
     change_y = total_change * math.sin(angle_prev + change_angle/2)
+    
+    angle_prev += change_angle
 
     return[change_x, change_y]
 
