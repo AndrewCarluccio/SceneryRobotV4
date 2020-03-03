@@ -175,7 +175,7 @@ def curve_test():
     last = points[len(points)-1]
     focus_pts.append([last[0]*TICKS_PER_INCH,last[1]*TICKS_PER_INCH])
 
-    print(focus_pts)
+    #print(focus_pts)
 
     #my_pos should be fed by encoder readings, not by speculation of success
     my_pos = get_global_coord()
@@ -202,7 +202,7 @@ def curve_test():
             my_pos = get_global_coord()
             roboclaw.ForwardM2(address, power_command[0])
             roboclaw.ForwardM1(address, power_command[1]) 
-
+    stop()
     return 1
 
 
