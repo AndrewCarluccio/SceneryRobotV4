@@ -170,9 +170,10 @@ def curve_test():
     k=0
     for pt in points:
         if((k % 11) == 0):
-            focus_pts.append(pt*TICKS_PER_INCH)
+            focus_pts.append([pt[0]*TICKS_PER_INCH,pt[1]*TICKS_PER_INCH])
             #print(pt)
-    focus_pts.append(points[len(points)-1]*TICKS_PER_INCH)
+    last = points[len(points)-1]
+    focus_pts.append([last[0]*TICKS_PER_INCH,last[1]*TICKS_PER_INCH])
 
     print(focus_pts)
 
