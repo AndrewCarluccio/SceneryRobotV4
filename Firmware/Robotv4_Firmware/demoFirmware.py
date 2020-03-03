@@ -151,6 +151,7 @@ def curve_test():
     global enc2
     global enc1_prev
     global enc2_prev
+    global angle_prev
 
     print("Running curve test...")
     # Create the curve instance
@@ -203,6 +204,8 @@ def curve_test():
             my_pos = get_global_coord()
             roboclaw.ForwardM1(address, power_command[0])
             roboclaw.ForwardM2(address, power_command[1]) 
+
+            theta = angle_prev
     stop()
     return 1
 
