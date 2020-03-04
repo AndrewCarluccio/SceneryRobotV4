@@ -127,10 +127,6 @@ def get_power_set(err_theta,err_dist):
     global enc1_prev
     global enc2_prev
 
-    #err_theta += 90
-
-    print(err_theta)
-
     #We don't really need this, but it could be helpful in the future
     #focus_point = circ_swing(math.radians(err_theta),err_dist)
 
@@ -138,21 +134,27 @@ def get_power_set(err_theta,err_dist):
 
     if(err_theta<=30 and err_theta >= 0):
         power_offsets = [STEP_3,0]
+        print("0-30 case here")
     elif(err_theta<=60 and err_theta >= 30):
         power_offsets = [STEP_2,0]
-        print("45 case here")
+        print("30-60 case here")
     elif(err_theta<=80 and err_theta >= 60):
         power_offsets = [STEP_1,0]
+        print("80-80 case here")
     
     elif(err_theta<=100 and err_theta>=80):
         power_offsets = [0,0]
+        print("80-100 case here")
 
-    elif(err_theta<=120 and err_theta >= 90):
+    elif(err_theta<=120 and err_theta >= 100):
         power_offsets = [0,STEP_1]
+        print("100-120 case here")
     elif(err_theta<=150 and err_theta >= 120):
         power_offsets = [0,STEP_2]
+        print("120-150 case here")
     elif(err_theta<=180 and err_theta >= 150):
         power_offsets = [0,STEP_3]
+        print("150-180 case here")
 
     return power_offsets
 
