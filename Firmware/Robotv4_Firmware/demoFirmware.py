@@ -222,8 +222,8 @@ def curve_test():
 
             #update my_pos
             my_pos = get_global_coord()
-            roboclaw.ForwardM1(address, power_command[0])
-            roboclaw.ForwardM2(address, power_command[1]) 
+            roboclaw.ForwardM2(address, power_command[0])
+            roboclaw.ForwardM1(address, power_command[1]) 
 
     stop()
     return 1
