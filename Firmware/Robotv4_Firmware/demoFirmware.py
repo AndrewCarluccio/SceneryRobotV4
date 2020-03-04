@@ -23,9 +23,9 @@ roboclaw.Open()
 
 MAX_DELTA = 50 #the maximum power 
 
-STEP_1 = 600
-STEP_2 = 800
-STEP_3 = 1000
+STEP_1 = 100
+STEP_2 = 200
+STEP_3 = 300
 
 enc1 = 0
 enc2 = 0
