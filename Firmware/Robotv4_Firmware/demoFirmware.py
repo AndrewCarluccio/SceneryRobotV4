@@ -133,7 +133,7 @@ def get_power_set(err_theta,err_dist):
     global enc1_prev
     global enc2_prev
 
-    err_theta += 90
+    #err_theta += 90
 
     print(err_theta)
 
