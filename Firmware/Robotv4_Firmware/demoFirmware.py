@@ -209,13 +209,14 @@ def curve_test():
         while(abs(pt[0] - my_pos[0]) >100 and abs(pt[1] - my_pos[1])>100): #add some margin check?
            
             gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
+            gamma = gamma*180 / math.pi
             e_theta = 180-gamma
             e_theta = 90 - e_theta
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
             base_power_set = [20,20] #or fake it in my case
-            power_offsets = get_power_set(((e_theta*180)/3.14159),e_dist)
+            power_offsets = get_power_set((e_theta),e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
             #update my_pos
