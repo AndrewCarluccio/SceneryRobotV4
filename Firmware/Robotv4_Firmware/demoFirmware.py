@@ -109,6 +109,9 @@ def get_global_coord():
     length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
     change_angle = (right_change - left_change) / length
 
+    print("Sai angle change")
+    print(change_angle)
+
     change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
     change_y = total_change * math.sin(angle_prev + change_angle/2)
     
