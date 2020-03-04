@@ -209,7 +209,8 @@ def curve_test():
         while(abs(pt[0] - my_pos[0]) >100 and abs(pt[1] - my_pos[1])>100): #add some margin check?
            
             gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
-            e_theta = theta-gamma
+            e_theta = 180-gamma
+            e_theta = 90 - e_theta
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
