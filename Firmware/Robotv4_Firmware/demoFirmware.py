@@ -37,6 +37,8 @@ angle_prev = 0
 
 TICKS_PER_INCH = 188.46
 
+prev_coord = [0,0]
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -99,6 +101,7 @@ def get_global_coord():
     global enc1_prev
     global enc2_prev
     global angle_prev
+    global prev_coord
 
     update_encoders()
 
@@ -117,7 +120,12 @@ def get_global_coord():
     
     angle_prev += change_angle
 
-    return[change_x, change_y]
+    prev_coord = [prev_coord[0]+change_x,prev_coord[1]+change_y]
+
+    print("Prev Coord")
+    print(prev_coord)
+
+    return prev_coord
 
 def get_power_set(err_theta,err_dist):
     global enc1
