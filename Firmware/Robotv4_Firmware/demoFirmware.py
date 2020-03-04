@@ -112,18 +112,12 @@ def get_global_coord():
     length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
     change_angle = (right_change - left_change) / length
 
-    print("Sai angle change")
-    print(change_angle)
-
     change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
     change_y = total_change * math.sin(angle_prev + change_angle/2)
     
     angle_prev += change_angle
 
     prev_coord = [prev_coord[0]+change_x,prev_coord[1]+change_y]
-
-    print("Prev Coord")
-    print(prev_coord)
 
     return prev_coord
 
@@ -200,11 +194,9 @@ def curve_test():
     my_pos = get_global_coord()
     theta = 0
 
-    print("Focus points")
-    print(focus_pts)
-
     for pt in focus_pts:
         print("Target point is: ")
+        print()
         print(pt)
         while(abs(pt[0] - my_pos[0]) >100 and abs(pt[1] - my_pos[1])>100): #add some margin check?
            
@@ -212,6 +204,13 @@ def curve_test():
             gamma = gamma*180 / math.pi
 
             e_theta = 90 + gamma - (angle_prev*180 / math.pi) 
+            
+            print("e_theta")
+            print(e_theta)
+
+            print("position")
+            print(my_pos)
+
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
@@ -224,7 +223,6 @@ def curve_test():
             roboclaw.ForwardM1(address, power_command[0])
             roboclaw.ForwardM2(address, power_command[1]) 
 
-            theta = angle_prev
     stop()
     return 1
 
