@@ -210,8 +210,8 @@ def curve_test():
            
             gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
             gamma = gamma*180 / math.pi
-            e_theta = 180-gamma
-            e_theta = 90 - e_theta
+
+            e_theta = 90 + gamma - angle_prev 
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
