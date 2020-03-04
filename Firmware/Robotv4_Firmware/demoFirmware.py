@@ -33,7 +33,7 @@ enc2 = 0
 enc1_prev = 0
 enc2_prev = 0
 
-angle_prev = 0
+angle_prev = 90*math.pi/180
 
 TICKS_PER_INCH = 188.46
 
