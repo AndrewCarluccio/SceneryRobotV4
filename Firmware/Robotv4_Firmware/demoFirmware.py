@@ -108,14 +108,19 @@ def get_global_coord():
     left_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
     right_change = enc2 - enc2_prev
 
-    total_change = (left_change + right_change) /2
-    length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
-    change_angle = (right_change - left_change) / length
+    right_inches = left_change / 188.46
+    left_inches = right_change / 188.46
 
-    change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
-    change_y = total_change * math.sin(angle_prev + change_angle/2)
-    
-    angle_prev += change_angle
+    total_inches_change = (right_inches + left_inches)/2.0
+
+    #total_change = (left_change + right_change) /2
+    #length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
+
+    angle_prev += (left_inches - right_inches) / 5.5 # This might have to be right - left
+    angle_prev -= float(int(angle_prev/6.2831853070)) * 6.2831853070
+
+    change_x = total_inches_change* math.cos(angle_prev * 57.2958) #Change 0 to previously stored angle
+    change_y = total_inches_change * math.sin(angle_prev * 57.2958)
 
     prev_coord = [prev_coord[0]+change_x,prev_coord[1]+change_y]
 
