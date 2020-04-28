@@ -11,6 +11,7 @@ import sys
 import time
 from geomdl import BSpline
 import math
+import OSC
 
 # address of the RoboClaw as set in Motion Studio
 address = 128
@@ -39,6 +40,11 @@ TICKS_PER_INCH = 188.46
 
 prev_coord = [0,0]
 
+# OSC Setup
+
+osc = OSC.OSCClient()
+osc.connect(('127.0.0.1', 8000)) #localhost, port 8000
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -63,7 +69,12 @@ def publish_data(page, data):
 #Generic function to stop the robot
 def stop():
     roboclaw.ForwardM1(address, 0)
+    stopmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 0")
+    osc.send(stopmsg1)
+
     roboclaw.ForwardM2(address, 0)
+    stopmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 0")
+    osc.send(stopmsg2)
 
 #Activate the current cue on deck, advance the rest, update previous, etc.
 def go():
@@ -223,7 +234,14 @@ def curve_test():
             #update my_pos
             my_pos = get_global_coord()
             roboclaw.ForwardM2(address, power_command[0])
-            roboclaw.ForwardM1(address, power_command[1]) 
+            speed2 = str(power_command[0])
+            forwardmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 " + speed2)
+            osc.send(forwardmsg2)
+
+            roboclaw.ForwardM1(address, power_command[1])
+            speed1 = str(power_command[1])
+            forwardmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 " + speed1)
+            osc.send(forwardmsg1) 
 
     stop()
     return 1
@@ -246,13 +264,29 @@ while(True):
             print("going forward")
             speed = int(words[2])
             roboclaw.ForwardM1(address, speed)
+
+            speedstr = str(speed)
+            forwardmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 " + speedstr)
+            osc.send(forwardmsg1) 
         elif(words[1] == "2"):
             speed = int(words[2])
             roboclaw.ForwardM2(address, speed)
+
+            speedstr = str(speed)
+            forwardmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 " + speedstr)
+            osc.send(forwardmsg2)
         elif(words[1] == "all"):
             speed = int(words[2])
             roboclaw.ForwardM2(address, speed)
-            roboclaw.ForwardM1(address, speed)          
+            roboclaw.ForwardM1(address, speed)
+
+            speedstr = str(speed)
+
+            forwardmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 " + speedstr)
+            osc.send(forwardmsg1)
+
+            forwardmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 " + speedstr)
+            osc.send(forwardmsg2)
     elif(words[0] == "stop"):
         stop()
     elif(words[0] == "cue"):
