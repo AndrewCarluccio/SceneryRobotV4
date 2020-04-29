@@ -56,11 +56,11 @@ def drive(args):
     return 1
 
 #Returns the encoder data for a particular motor
-def get_encoder_data(enc_id):
-    if(enc_id == 1):
-        return roboclaw.ReadEncM1(address)
-    elif(enc_id == 2):
-        return roboclaw.ReadEncM2(address)
+#def get_encoder_data(enc_id):
+ #   if(enc_id == 1):
+        #return roboclaw.ReadEncM1(address)
+  #  elif(enc_id == 2):
+        #return roboclaw.ReadEncM2(address)
 
 #Publish data to the server
 def publish_data(page, data):
@@ -68,11 +68,11 @@ def publish_data(page, data):
 
 #Generic function to stop the robot
 def stop():
-    roboclaw.ForwardM1(address, 0)
+    #roboclaw.ForwardM1(address, 0)
     stopmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 0")
     osc.send(stopmsg1)
 
-    roboclaw.ForwardM2(address, 0)
+    #roboclaw.ForwardM2(address, 0)
     stopmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 0")
     osc.send(stopmsg2)
 
@@ -233,12 +233,12 @@ def curve_test():
 
             #update my_pos
             my_pos = get_global_coord()
-            roboclaw.ForwardM2(address, power_command[0])
+            #roboclaw.ForwardM2(address, power_command[0])
             speed2 = str(power_command[0])
             forwardmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 " + speed2)
             osc.send(forwardmsg2)
 
-            roboclaw.ForwardM1(address, power_command[1])
+            #roboclaw.ForwardM1(address, power_command[1])
             speed1 = str(power_command[1])
             forwardmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 " + speed1)
             osc.send(forwardmsg1) 
@@ -247,8 +247,8 @@ def curve_test():
     return 1
 
 
-roboclaw.SetEncM1(address, 0)
-roboclaw.SetEncM2(address, 0)
+#roboclaw.SetEncM1(address, 0)
+#roboclaw.SetEncM2(address, 0)
 
 full_rotation = 4218*2
 
@@ -263,22 +263,22 @@ while(True):
         if(words[1] == "1"):
             print("going forward")
             speed = int(words[2])
-            roboclaw.ForwardM1(address, speed)
+            #roboclaw.ForwardM1(address, speed)
 
             speedstr = str(speed)
             forwardmsg1 = OSC.OSCMessage("/pythonscript", "WHEEL1 " + speedstr)
             osc.send(forwardmsg1) 
         elif(words[1] == "2"):
             speed = int(words[2])
-            roboclaw.ForwardM2(address, speed)
+            #roboclaw.ForwardM2(address, speed)
 
             speedstr = str(speed)
             forwardmsg2 = OSC.OSCMessage("/pythonscript", "WHEEL2 " + speedstr)
             osc.send(forwardmsg2)
         elif(words[1] == "all"):
             speed = int(words[2])
-            roboclaw.ForwardM2(address, speed)
-            roboclaw.ForwardM1(address, speed)
+            #roboclaw.ForwardM2(address, speed)
+            #roboclaw.ForwardM1(address, speed)
 
             speedstr = str(speed)
 
@@ -291,27 +291,35 @@ while(True):
         stop()
     elif(words[0] == "cue"):
         if(words[1] == "all"):
-             roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
-             roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
+            continue
+             #roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
+             #roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
         elif(words[1] == "1"):
-            roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
+            continue
+            #roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
         elif(words[1] == "2"):
-            roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
+            continue
+            #roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
     elif(words[0] == "enc"):
-        print(get_encoder_data(1))
-        print(get_encoder_data(2))
+        continue
+        #print(get_encoder_data(1))
+        #print(get_encoder_data(2))
     elif(words[0] == "clear"):
-        roboclaw.SetEncM1(address, 0)
-        roboclaw.SetEncM2(address, 0)
+        continue
+        #roboclaw.SetEncM1(address, 0)
+        #roboclaw.SetEncM2(address, 0)
     elif(words[0] == "inc"):
-        roboclaw.ForwardM1(address, 50) 
+        continue
+        #roboclaw.ForwardM1(address, 50) 
         time.sleep(0.1)
-        roboclaw.ForwardM1(address, 0) 
+        #roboclaw.ForwardM1(address, 0) 
     elif(words[0] == "spin1"):
-        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation),1)
+        continue
+        #roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation),1)
     elif(words[0] == "spin2"):
-        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 2.0),1)
-        roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
+        continue
+        #roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 2.0),1)
+        #roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
     elif(words[0] == "curve"):
         curve_test()
         
