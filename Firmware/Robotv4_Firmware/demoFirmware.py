@@ -36,6 +36,9 @@ enc2_prev = 0
 angle_prev = 90*math.pi/180
 
 TICKS_PER_INCH = 188.46
+TICKS_PER_REVOLUTION = 1485.0
+
+ROBOT_WIDTH = 5.5 #In Inches
 
 prev_coord = [0,0]
 
@@ -87,12 +90,14 @@ def update_encoders():
     global enc1_prev
     global enc2_prev
     
-
     enc1_prev = enc1
     enc2_prev = enc2
 
     enc1 = get_encoder_data(1)[1] #Left Wheel
-    enc2 = get_encoder_data(2)[1] #Right Wheel
+    enc2 = -1 * get_encoder_data(2)[1] #Right Wheel, This wheel gives out negative encoder readings
+
+    print(enc1)
+    print(enc2)
 
 
 def get_global_coord():
@@ -102,18 +107,23 @@ def get_global_coord():
     global enc2_prev
     global angle_prev
     global prev_coord
+    #Ticks in a Revolution is 1485
 
     update_encoders()
 
-    left_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
-    right_change = enc2 - enc2_prev
+    left_enc_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
+    right_enc_change = enc2 - enc2_prev
+
+    left_change = 2 * math.pi * 2.75 *  (left_enc_change/ 1485.0)
+    right_change = 2 * math.pi * 2.75 * (right_enc_change/ 1485.0)
 
     total_change = (left_change + right_change) /2
-    length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
-    change_angle = (right_change - left_change) / length
 
-    change_x = total_change * math.cos(angle_prev + change_angle/2) #Change 0 to previously stored angle
-    change_y = total_change * math.sin(angle_prev + change_angle/2)
+    #length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
+    change_angle = (right_change - left_change) / 5.5
+
+    change_x = total_change * math.cos(angle_prev) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(angle_prev)
     
     angle_prev += change_angle
 
@@ -186,11 +196,10 @@ def curve_test():
     for pt in points:
         if((k % 11) == 0):
             focus_pts.append([pt[0]*TICKS_PER_INCH,pt[1]*TICKS_PER_INCH])
+        k += 1
             #print(pt)
     last = points[len(points)-1]
     focus_pts.append([last[0]*TICKS_PER_INCH,last[1]*TICKS_PER_INCH])
-
-    #print(focus_pts)
 
     #my_pos should be fed by encoder readings, not by speculation of success
     my_pos = get_global_coord()
@@ -200,6 +209,8 @@ def curve_test():
         print("Target point is: ")
         print()
         print(pt)
+        print("My X Position Is: " +  str(my_pos[0]))
+        print("My Y Position Is: " + str(my_pos[1]))
         while(abs(pt[0] - my_pos[0]) >100 and abs(pt[1] - my_pos[1])>100): #add some margin check?
            
             gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
@@ -207,16 +218,16 @@ def curve_test():
 
             e_theta = 90 + gamma - (angle_prev*180 / math.pi) 
             
-            print("e_theta")
-            print(e_theta)
+            #print("e_theta")
+            #print(e_theta)
 
-            print("position")
-            print(my_pos)
+            #print("position")
+            #print(my_pos)
 
             e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
 
             #Now do the acceleration thing...
-            base_power_set = [20,20] #or fake it in my case
+            base_power_set = [15, 15]#or fake it in my case
             power_offsets = get_power_set((e_theta),e_dist)
             power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
 
@@ -233,6 +244,41 @@ roboclaw.SetEncM1(address, 0)
 roboclaw.SetEncM2(address, 0)
 
 full_rotation = 4218*2
+
+def get_spline():
+    print("Running curve test...")
+    # Create the curve instance
+    crv = BSpline.Curve()
+    # Set degree
+    crv.degree = 3
+    # Set control points
+    crv.ctrlpts = [[0, 0], [3, 7], [5,1], [9,9]]
+    # Set knot vector
+    crv.knotvector = [0, 0, 0, 0, 1, 1, 1, 1]
+    
+    # Get curve points
+    points = crv.evalpts
+
+    #assign every 10th pt to a list, as well as start and finish
+    focus_pts = []
+    #focus_pts.append(points[0])
+    k=0
+    for pt in points:
+        if((k % 11) == 0):
+            focus_pts.append([pt[0],pt[1]])
+        k += 1
+            #print(pt)
+    last = points[len(points)-1]
+    focus_pts.append([last[0],last[1]])
+
+    print(focus_pts)
+
+def mini_curve():
+    roboclaw.ForwardM2(address, 12)
+    roboclaw.ForwardM1(address, 14)
+    while (True):
+        my_pos = get_global_coord()
+        print(my_pos)
 
 #Execution loop
 while(True):
@@ -280,8 +326,10 @@ while(True):
         roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
     elif(words[0] == "curve"):
         curve_test()
-        
-
+    elif(words[0] == "spline"):
+        get_spline()
+    elif(words[0] == "mini"):
+        mini_curve()
     #else:
         #print ("No data")
 
