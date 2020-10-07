@@ -33,10 +33,12 @@ enc2 = 0
 enc1_prev = 0
 enc2_prev = 0
 
-angle_prev = 90*math.pi/180
+angle_prev = 0
+#90*math.pi/180
+theta = 0
 
 TICKS_PER_INCH = 188.46
-TICKS_PER_REVOLUTION = 1485.0
+TICKS_PER_REVOLUTION = 1490.0
 
 ROBOT_WIDTH = 5.5 #In Inches
 
@@ -96,9 +98,6 @@ def update_encoders():
     enc1 = get_encoder_data(1)[1] #Left Wheel
     enc2 = -1 * get_encoder_data(2)[1] #Right Wheel, This wheel gives out negative encoder readings
 
-    print(enc1)
-    print(enc2)
-
 
 def get_global_coord():
     global enc1
@@ -107,25 +106,38 @@ def get_global_coord():
     global enc2_prev
     global angle_prev
     global prev_coord
-    #Ticks in a Revolution is 1485
+    global theta
 
     update_encoders()
 
     left_enc_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
     right_enc_change = enc2 - enc2_prev
 
-    left_change = 2 * math.pi * 2.75 *  (left_enc_change/ 1485.0)
-    right_change = 2 * math.pi * 2.75 * (right_enc_change/ 1485.0)
+    #left_inches = 2 * math.pi * 2.75 *  (left_enc_change/ 1485.0)
+    #right_change = 2 * math.pi * 2.75 * (right_enc_change/ 1485.0)
 
-    total_change = (left_change + right_change) /2
+    right_inches = right_enc_change / TICKS_PER_INCH
+    left_inches = left_enc_change/ TICKS_PER_INCH
+
+    total_change = (left_inches + right_inches) /2
 
     #length = 5.5 * TICKS_PER_INCH #This is the length of the robot in inches
-    change_angle = (right_change - left_change) / 5.5
 
-    change_x = total_change * math.cos(angle_prev) #Change 0 to previously stored angle
-    change_y = total_change * math.sin(angle_prev)
+    theta += ((left_inches - right_inches) / ROBOT_WIDTH)
+    if(theta >= 0):
+        theta =  theta % (math.pi * 2)
+    else:
+        theta = theta % -(math.pi * 2) 
+    #theta -= (theta / (2 * math.pi)) * (2* math.pi)
+
+    #MATH.SIN AND MATH.COS ARE MADE TO TAKE IN A RADIAN VALUE
+
+    change_x = total_change * math.cos(theta) #Change 0 to previously stored angle
+    change_y = total_change * math.sin(theta)
+
+    angle_prev = theta
     
-    angle_prev += change_angle
+    #angle_prev += change_angle
 
     prev_coord = [prev_coord[0]+change_x,prev_coord[1]+change_y]
 
@@ -274,8 +286,8 @@ def get_spline():
     print(focus_pts)
 
 def mini_curve():
-    roboclaw.ForwardM2(address, 12)
-    roboclaw.ForwardM1(address, 14)
+    roboclaw.ForwardM2(address, 14)
+    roboclaw.ForwardM1(address, 12)
     while (True):
         my_pos = get_global_coord()
         print(my_pos)
