@@ -44,6 +44,8 @@ ROBOT_WIDTH = 5.5 #In Inches
 
 prev_coord = [0,0]
 
+#M2 IS RIGHT WHEEL, M1 IS LEFT WHEEL
+
 #FUNCTIONS------------------------------------------------------
 
 #Get cues from the server and save them to local memory
@@ -133,7 +135,7 @@ def get_global_coord():
     #MATH.SIN AND MATH.COS ARE MADE TO TAKE IN A RADIAN VALUE
 
     change_x = total_change * math.cos(theta) #Change 0 to previously stored angle
-    change_y = total_change * math.sin(theta)
+    change_y =  -1 * total_change * math.sin(theta)
 
     angle_prev = theta
     
@@ -286,11 +288,12 @@ def get_spline():
     print(focus_pts)
 
 def mini_curve():
-    roboclaw.ForwardM2(address, 14)
-    roboclaw.ForwardM1(address, 12)
-    while (True):
+    roboclaw.ForwardM2(address, 15)
+    roboclaw.ForwardM1(address, 14)
+    while(get_global_coord()[0] < 12.0):
         my_pos = get_global_coord()
         print(my_pos)
+    stop()
 
 #Execution loop
 while(True):
