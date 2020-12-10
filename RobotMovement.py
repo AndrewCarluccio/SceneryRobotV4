@@ -23,12 +23,6 @@ roboclaw = Roboclaw("/dev/ttyS0", 115200)
 # Starting communication with the RoboClaw hardware
 roboclaw.Open()
 
-MAX_DELTA = 50 #the maximum power 
-
-STEP_1 = 10
-STEP_2 = 20
-STEP_3 = 30
-
 enc1 = 0
 enc2 = 0
 
@@ -42,7 +36,7 @@ pure_angle = 0.0
 TICKS_PER_INCH = 188.46
 TICKS_PER_REVOLUTION = 1490.0
 
-ROBOT_WIDTH = 7.0625 #In Inches
+ROBOT_WIDTH = 7.675 #In Inches
 
 prev_coord = [0,0]
 
@@ -60,15 +54,7 @@ TURN_CONST = 4
 MAX_ACCEL = 2
 MAX_VEL_CHANGE = 6
 
-#FUNCTIONS------------------------------------------------------
-
-#Get cues from the server and save them to local memory
-def pull_cues():
-    return 1
-
-#Takes movement parameters and calls on Roboclaw to complete
-def drive(args):
-    return 1
+#ENCODER DATA FUNCTIONS------------------------------------------------------
 
 #Returns the encoder data for a particular motor
 def get_encoder_data(enc_id):
@@ -77,30 +63,10 @@ def get_encoder_data(enc_id):
     elif(enc_id == 2):
         return roboclaw.ReadEncM2(address)
 
-#Publish data to the server
-def publish_data(page, data):
-    return 1
-
 #Generic function to stop the robot
 def stop():
     roboclaw.ForwardM1(address, 0)
     roboclaw.ForwardM2(address, 0)
-
-#Activate the current cue on deck, advance the rest, update previous, etc.
-def go():
-    return 1
-
-#Trigger homing system to remove accumulated error (hardware support pending)
-def home():
-    return 1
-
-#Reads an input file and sets up a server with ip information, etc.
-def config_server(input_file):
-    return 1
-
-#Sets a particular SPI pin HIGH or LOW for external devices
-def pin_mode(pin, val):
-    return 1
 
 def update_encoders():
     global enc1
@@ -113,6 +79,8 @@ def update_encoders():
 
     enc1 = get_encoder_data(1)[1] #Left Wheel
     enc2 = get_encoder_data(2)[1] #Right Wheel
+
+#PATH GENERATION FUNCTION-----------------------------------------------------
 
 def path_generation():
     global MAX_VEL, START_VEL, TURN_CONST, MAX_ACCEL
@@ -171,6 +139,8 @@ def path_generation():
     
     return final_path
 
+#MAIN ODOMETRY FUNCTION---------------------------------------------------
+
 def get_global_coord():
     global enc1
     global enc2
@@ -211,141 +181,7 @@ def get_global_coord():
     #pos = prev_coord
     return prev_coord
 
-def get_power_set(err_theta,err_dist):
-    global enc1
-    global enc2
-    global enc1_prev
-    global enc2_prev
-
-    #We don't really need this, but it could be helpful in the future
-    #focus_point = circ_swing(math.radians(err_theta),err_dist)
-
-    power_offsets = [0,0] #move straight ahead
-
-    if(err_theta<=30 and err_theta >= 0):
-        power_offsets = [STEP_3,0]
-        print("0-30 case here")
-    elif(err_theta<=60 and err_theta >= 30):
-        power_offsets = [STEP_2,0]
-        print("30-60 case here")
-    elif(err_theta<=80 and err_theta >= 60):
-        power_offsets = [STEP_1,0]
-        print("80-80 case here")
-    
-    elif(err_theta<=100 and err_theta>=80):
-        power_offsets = [0,0]
-        print("80-100 case here")
-
-    elif(err_theta<=120 and err_theta >= 100):
-        power_offsets = [0,STEP_1]
-        print("100-120 case here")
-    elif(err_theta<=150 and err_theta >= 120):
-        power_offsets = [0,STEP_2]
-        print("120-150 case here")
-    elif(err_theta<=180 and err_theta >= 150):
-        power_offsets = [0,STEP_3]
-        print("150-180 case here")
-
-    return power_offsets
-
-#This is where we are testing the NURB follow ability
-def curve_test():
-    global enc1
-    global enc2
-    global enc1_prev
-    global enc2_prev
-    global angle_prev
-
-    print("Running curve test...")
-    # Create the curve instance
-    crv = BSpline.Curve()
-    # Set degree
-    crv.degree = 3
-    # Set control points
-    crv.ctrlpts = [[0, 0], [3, 7], [5,1], [9,9]]
-    # Set knot vector
-    crv.knotvector = [0, 0, 0, 0, 1, 1, 1, 1]
-    
-    # Get curve points
-    points = crv.evalpts
-
-    #assign every 10th pt to a list, as well as start and finish
-    focus_pts = []
-    #focus_pts.append(points[0])
-    k=0
-    for pt in points:
-        if((k % 11) == 0):
-            focus_pts.append([pt[0]*TICKS_PER_INCH,pt[1]*TICKS_PER_INCH])
-        k += 1
-            #print(pt)
-    last = points[len(points)-1]
-    focus_pts.append([last[0]*TICKS_PER_INCH,last[1]*TICKS_PER_INCH])
-
-    #my_pos should be fed by encoder readings, not by speculation of success
-    my_pos = get_global_coord()
-
-    for pt in focus_pts:
-        print("Target point is: ")
-        print()
-        print(pt)
-        print("My X Position Is: " +  str(my_pos[0]))
-        print("My Y Position Is: " + str(my_pos[1]))
-        while(abs(pt[0] - my_pos[0]) >100 and abs(pt[1] - my_pos[1])>100): #add some margin check?
-           
-            gamma = math.atan2((pt[1]-my_pos[1]) , (pt[0]-my_pos[0]))
-            gamma = gamma*180 / math.pi
-
-            e_theta = 90 + gamma - (angle_prev*180 / math.pi) 
-            
-            #print("e_theta")
-            #print(e_theta)
-
-            #print("position")
-            #print(my_pos)
-
-            e_dist = math.sqrt((pt[0]-my_pos[0])**2 + (pt[1]-my_pos[1])**2)
-
-            #Now do the acceleration thing...
-            base_power_set = [15, 15]#or fake it in my case
-            power_offsets = get_power_set((e_theta),e_dist)
-            power_command = [base_power_set[0]+power_offsets[0], base_power_set[1]+power_offsets[1]]
-
-            #update my_pos
-            my_pos = get_global_coord()
-            roboclaw.ForwardM2(address, power_command[0])
-            roboclaw.ForwardM1(address, power_command[1]) 
-
-    stop()
-    return 1
-
-
-roboclaw.SetEncM1(address, 0)
-roboclaw.SetEncM2(address, 0)
-
-full_rotation = 4218*2
-
-def get_spline():
-    print("Running curve test...")
-    # Create the curve instance
-    crv = BSpline.Curve()
-    # Set degree
-    crv.degree = 3
-    # Set control points
-    crv.ctrlpts = [[0, 0], [3, 7], [5,1], [9,9]]
-    # Set knot vector
-    crv.knotvector = [0, 0, 0, 0, 1, 1, 1, 1]   
-    # Get curve points
-    points = crv.evalpts
-
-    print(points)
-
-def mini_curve():
-    roboclaw.SpeedM1(address, 500)
-    roboclaw.SpeedM2(address,600)
-    while(get_global_coord()[0] < 12.0):
-        my_pos = get_global_coord()
-        print(my_pos)
-    stop()
+#PURE PURSUIT FUNCTIONS----------------------------------------------------------
 
 #Finds the closest coordinate in the path
 def closest(path):
@@ -398,6 +234,16 @@ def curvature(lookahead, path):
 def turn(curv, vel):
     return [(vel*(2+(curv*ROBOT_WIDTH))/2) , (vel*(2-(curv*ROBOT_WIDTH))/2)]
 
+#TESTING FUNCTIONS---------------------------------------------------------------
+
+def mini_curve():
+    roboclaw.SpeedM1(address, 500)
+    roboclaw.SpeedM2(address,600)
+    while(get_global_coord()[0] < 12.0):
+        my_pos = get_global_coord()
+        print(my_pos)
+    stop()
+
 
 def speed_test():
     roboclaw.SpeedM1(address, 1130)
@@ -447,6 +293,8 @@ def test_follow():
         print("Position:", pos)
     stop()
 
+#MAIN LOOP---------------------------------------------
+
 while(True):
     #For the sake of demo, a simple text-based control system:
     var = input("Please Enter a drive command: ")
@@ -467,33 +315,14 @@ while(True):
             roboclaw.ForwardM1(address, speed)          
     elif(words[0] == "stop"):
         stop()
-    elif(words[0] == "cue"):
-        if(words[1] == "all"):
-             roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
-             roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
-        elif(words[1] == "1"):
-            roboclaw.SpeedAccelDeccelPositionM1(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
-        elif(words[1] == "2"):
-            roboclaw.SpeedAccelDeccelPositionM2(address,int(words[2]),int(words[3]),int(words[4]),int(words[5]),int(words[6]))
     elif(words[0] == "enc"):
         print(get_encoder_data(1))
         print(get_encoder_data(2))
     elif(words[0] == "clear"):
         roboclaw.SetEncM1(address, 0)
         roboclaw.SetEncM2(address, 0)
-    elif(words[0] == "inc"):
-        roboclaw.ForwardM1(address, 50) 
-        time.sleep(0.1)
-        roboclaw.ForwardM1(address, 0) 
-    elif(words[0] == "spin1"):
-        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation),1)
-    elif(words[0] == "spin2"):
-        roboclaw.SpeedAccelDeccelPositionM1(address,300,500,200,int(full_rotation / 2.0),1)
-        roboclaw.SpeedAccelDeccelPositionM2(address,300,500,200,int(full_rotation / -2.0),1)
     elif(words[0] == "curve"):
         curve_test()
-    elif(words[0] == "spline"):
-        get_spline()
     elif(words[0] == "mini"):
         mini_curve()
     elif(words[0] == "test"):
@@ -502,8 +331,3 @@ while(True):
         speed_test()
     elif(words[0] == "path"):
         path_generation()
-    
-
-
-
-
