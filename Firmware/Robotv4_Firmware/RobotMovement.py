@@ -13,6 +13,7 @@ from geomdl import BSpline
 import math
 import numpy as np
 import time
+import configparser
 
 # address of the RoboClaw as set in Motion Studio
 address = 128
@@ -23,6 +24,7 @@ roboclaw = Roboclaw("/dev/ttyS0", 115200)
 # Starting communication with the RoboClaw hardware
 roboclaw.Open()
 
+#INITIALIZING GLOBALS FOR PURE PURSUIT
 enc1 = 0
 enc2 = 0
 
@@ -31,28 +33,29 @@ enc2_prev = 0
 
 angle_prev = 0.0
 pure_angle = 0.0
-#90*math.pi/180
 
-TICKS_PER_INCH = 188.46
-TICKS_PER_REVOLUTION = 1490.0
+config = configparser.ConfigParser()
+config.read("config.ini")
 
-ROBOT_WIDTH = 7.675 #In Inches
+TICKS_PER_INCH = config["MEASUREMENTS"]["TICKS_PER_INCH"]
+TICKS_PER_REVOLUTION = config["MEASUREMENTS"]["TICKS_PER_REVOLUTION"]
+
+ROBOT_WIDTH = config["MEASUREMENTS"]["ROBOT_WIDTH"] #In Inches
 
 prev_coord = [0,0]
 
 #M2 IS RIGHT WHEEL, M1 IS LEFT WHEEL
-
 t = 0
 t_i = 0
-LOOKAHEAD_DISTANCE = 0.5
+LOOKAHEAD_DISTANCE = config["PURSUIT"]["LOOKAHEAD_DISTANCE"]
 pos = [0.0,0.0]
 
 #VELOCITY/ACCEL CONSTANTS IN INCHES PER SECOND
-MAX_VEL = 10
-START_VEL = 4
-TURN_CONST = 4
-MAX_ACCEL = 2
-MAX_VEL_CHANGE = 6
+MAX_VEL = config["PURSUIT"]["MAX_VEL"]
+START_VEL = config["PURSUIT"]["START_VEL"]
+TURN_CONST = config["PURSUIT"]["TURN_CONST"]
+MAX_ACCEL = config["PURSUIT"]["MAX_ACCEL"]
+MAX_VEL_CHANGE = config["PURSUIT"]["MAX_VEL_CHANGE"]
 
 #ENCODER DATA FUNCTIONS------------------------------------------------------
 
@@ -154,9 +157,6 @@ def get_global_coord():
     left_enc_change = enc1 - enc1_prev #Change 0 to previously stored encoder data
     right_enc_change = enc2 - enc2_prev
 
-    #left_inches = 2.0 * math.pi * 2.75 *  (left_enc_change/ 1485.0)
-    #right_inches= 2.0 * math.pi * 2.75 * (right_enc_change/ 1485.0)
-
     right_inches = right_enc_change / TICKS_PER_INCH
     left_inches = left_enc_change/ TICKS_PER_INCH
 
@@ -171,14 +171,11 @@ def get_global_coord():
         angle_prev =  angle_prev % -(math.pi * 2) 
 
     #MATH.SIN AND MATH.COS ARE MADE TO TAKE IN A RADIAN VALUE
-
     change_x = total_change * math.cos(angle_prev) #Change 0 to previously stored angle
     change_y =  total_change * math.sin(angle_prev)
     
     #angle_prev += change_angle
-
     prev_coord = [prev_coord[0]+change_x,prev_coord[1]+change_y]
-    #pos = prev_coord
     return prev_coord
 
 #PURE PURSUIT FUNCTIONS----------------------------------------------------------
@@ -235,7 +232,6 @@ def turn(curv, vel):
     return [(vel*(2+(curv*ROBOT_WIDTH))/2) , (vel*(2-(curv*ROBOT_WIDTH))/2)]
 
 #TESTING FUNCTIONS---------------------------------------------------------------
-
 def mini_curve():
     roboclaw.SpeedM1(address, 500)
     roboclaw.SpeedM2(address,600)
@@ -244,7 +240,6 @@ def mini_curve():
         print(my_pos)
     stop()
 
-
 def speed_test():
     roboclaw.SpeedM1(address, 1130)
     roboclaw.SpeedM2(address, 1200)
@@ -252,12 +247,7 @@ def speed_test():
     stop()
 
 def test_follow():
-    global enc1
-    global enc2
-    global enc1_prev
-    global enc2_prev
-    global t_i, pos,
-    global angle_prev
+    global enc1, enc2, enc1_prev, enc2_prev, t_i, pos, angle_prev
     #pure_angle
     path = path_generation()
     angle_prev = math.atan2(path[1][0], path[1][1])
