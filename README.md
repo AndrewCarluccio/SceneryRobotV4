@@ -1,7 +1,7 @@
 # SceneryRobotV4
 Version 4 of the UVA Stage Robotics Development Project
 
-#Fall 2020 Development
+# Fall 2020 Development
 
 This semester, we have made great strides in furthering the development of the robot after COVID-19 halted progress on the physical robot.
 
