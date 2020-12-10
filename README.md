@@ -13,3 +13,11 @@ This data will be crucial going forward as it gives the robot the basis of what 
 For the upcoming semester, our primary goal will be to implement a pursuit algorithm which allows the robot to follow a path given that the robot knows its own 
 position and angle. With this algorithm implemented, the robot will be able to follow user defined paths which was our primary goal with the transition to the
 raspberry pi platform in the spring of 2020.
+
+# Important Files
+
+TestSpline.py - Contains the newest path generation algorithm
+
+config.ini - Contains important constants used in odometry and Pure Pursuit
+
+RobotMovement.py - Contains the odometry and pure pursuit algorithms for the robot
